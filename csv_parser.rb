@@ -1,7 +1,9 @@
 require "csv"
-require_relative "Person"
+require_relative "person_converter"
+
 
 class CSVParser
+  extend PersonConverter
 
   def parse
     @csv.each do |row|
@@ -20,13 +22,7 @@ class CSVParser
     end
 
     def generate_person(row)
-      email = row.join
-      split_email = email.split(/\W/)
-      first_name = split_email[0]
-      last_name = split_email[1]
-      scope_id = 14
-      p = Person.new(first_name, last_name, scope_id, email)
-      puts "#{p.inspect}"
+      CSVParser::row_to_person(row)
     end
 
 end
