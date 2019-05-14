@@ -8,13 +8,12 @@ class CSVParser
   OUTPUT_HEADER = ["first_name", "last_name", "scope_id", "email"]
 
   def parse
-    @csv.each do |row|
-      generate_person(row)
-    end
+    generate_people
   end
 
   def write
     create_csv
+    puts "'output.csv' has been created :)"
   end
 
   private
@@ -24,9 +23,11 @@ class CSVParser
       @people = []
     end
 
-    def generate_person(row)
-      person = CSVParser::deserialize(row)
-      @people.push(person)
+    def generate_people
+      @csv.each do |row|
+        person = CSVParser::deserialize(row)
+        @people.push(person)
+      end
     end
 
     def create_csv

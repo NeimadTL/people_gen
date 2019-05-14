@@ -1,6 +1,6 @@
 require "minitest/autorun"
 require "csv"
-require_relative "Person"
+require_relative "person"
 require_relative "person_serializer"
 require_relative "csv_parser"
 
