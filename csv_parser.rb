@@ -5,6 +5,8 @@ require_relative "person_serializer"
 class CSVParser
   extend PersonSerializer
 
+  OUTPUT_HEADER = ["first_name", "last_name", "scope_id", "email"]
+
   def parse
     @csv.each do |row|
       generate_person(row)
@@ -23,7 +25,7 @@ class CSVParser
     end
 
     def open(file_name)
-      @csv = CSV.open(file_name, "r")
+      @csv = CSV.open(file_name, "r", headers: true)
     end
 
     def generate_person(row)
@@ -32,7 +34,7 @@ class CSVParser
     end
 
     def create_csv
-      CSV.open("output.csv", "wb") do |csv|
+      CSV.open("output.csv", "wb", write_headers: true, headers: OUTPUT_HEADER) do |csv|
         @people.each do |person|
          csv << CSVParser::serialize(person)
         end
