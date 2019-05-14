@@ -20,12 +20,8 @@ class CSVParser
   private
 
     def initialize(file_name)
-      open(file_name)
-      @people = []
-    end
-
-    def open(file_name)
       @csv = CSV.open(file_name, "r", headers: true)
+      @people = []
     end
 
     def generate_person(row)

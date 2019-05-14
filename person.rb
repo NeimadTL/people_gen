@@ -6,7 +6,8 @@ class Person
     @first_name = first_name
     @last_name = last_name
     @scope_id = scope_id
-    @email = email.chop.downcase
+    @email = email.chomp.downcase
+
   end
 
 end
