@@ -1,9 +1,9 @@
 require "csv"
-require_relative "person_converter"
+require_relative "person_serializer"
 
 
 class CSVParser
-  extend PersonConverter
+  extend PersonSerializer
 
   def parse
     @csv.each do |row|
@@ -27,22 +27,21 @@ class CSVParser
     end
 
     def generate_person(row)
-      person = CSVParser::row_to_person(row)
+      person = CSVParser::deserialize(row)
       @people.push(person)
     end
 
     def create_csv
       CSV.open("output.csv", "wb") do |csv|
-#        csv << ["row", "of", "CSV", "data"]
         @people.each do |person|
-         csv << CSVParser::person_to_row(person)
+         csv << CSVParser::serialize(person)
         end
-
-      
       end
     end
 
 end
 
 
-parser = CSVParser.new("input.csv").parse.write
+parser = CSVParser.new("input.csv")
+parser.parse
+parser.write

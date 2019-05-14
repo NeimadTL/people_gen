@@ -1,8 +1,8 @@
-require_relative "person"
+require_relative "Person"
 
-module PersonConverter
+module PersonSerializer
 
-  def row_to_person(row)
+  def deserialize(row)
     email = row.join
     split_email = email.split(/\W/)
     first_name = split_email[0]
@@ -11,7 +11,7 @@ module PersonConverter
     Person.new(first_name, last_name, scope_id, email)
   end
 
-  def person_to_row(person)
+  def serialize(person)
     row = [person.first_name, person.last_name, person.scope_id, person.email]
   end
 
