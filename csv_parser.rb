@@ -5,39 +5,35 @@ require_relative "person_serializer"
 class CSVParser
   extend PersonSerializer
 
-  OUTPUT_HEADER = ["first_name", "last_name", "scope_id", "email"]
-
   def parse
-    generate_people
+    csv = open(@source, "r", headers: true)
+    csv.each do |row|
+      @objects.push(CSVParser::deserialize(row))
+    end
   end
 
-  def write
-    create_csv
-    puts "'output.csv' has been created :)"
+  def write(output = @destination)
+    output_header = @objects.first.instance_variables.join.scan(/\w+/)
+    csv = open(@destination, "wb", write_headers: true, headers: output_header)
+    @objects.each do |object|
+      csv << CSVParser::serialize(object)
+    end
+    puts "'#{@destination}' has been created :)"
   end
 
   private
 
-    def initialize(file_name)
-      @csv = CSV.open(file_name, "r", headers: true)
-      @people = []
+    def initialize(source, destination = "output.csv")
+      @destination = destination
+      @source = source
+      @objects = []
     end
 
-    def generate_people
-      @csv.each do |row|
-        person = CSVParser::deserialize(row)
-        @people.push(person)
-      end
+    # accepted params:
+    # write_headers: boolean, headers: []
+    def open(source, mode, **params)
+      CSV.open(source, mode, params)
     end
-
-    def create_csv
-      CSV.open("output.csv", "wb", write_headers: true, headers: OUTPUT_HEADER) do |csv|
-        @people.each do |person|
-         csv << CSVParser::serialize(person)
-        end
-      end
-    end
-
 end
 
 
